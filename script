@@ -1,0 +1,43 @@
+#!/bin/bash
+
+buildsimh() {
+  git clone https://github.com/simh/simh.git
+  cd simh
+  git checkout $1
+  gmake vax || make vax
+  cd ..
+}
+
+writeinis() {
+  cat >microvax3900.ini <<__EOF__
+SET RUNLIMIT 90 seconds
+ATT NVR nvram.dat
+DEP BDR 1
+EXPECT "Device\? \x5BXQA0\x5D: "  SEND "dua0:\r" ;GO
+BOOT CPU
+__EOF__
+
+  cat >sv.ini<<__EOF__
+SHOW VERSION
+QUIT
+__EOF__
+}
+
+runit() {
+simh/BIN/microvax3900 sv.ini
+for c in 1; do
+  echo; echo ++++++++++ run $c $(date) ++++++++++
+  rm -f nvram.dat
+  simh/BIN/microvax3900
+  echo; echo ++++++++++++++++++++++++++++++++++++
+done
+}
+
+main() {
+buildsimh $1
+writeinis
+runit
+}
+
+((${#}-2))&&$1
+((${#}-1))&&main $2
