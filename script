@@ -10,7 +10,7 @@ buildsimh() {
 
 writeinis() {
   cat >microvax3900.ini <<__EOF__
-SET RUNLIMIT 90 seconds
+SET RUNLIMIT 45 seconds
 ATT NVR nvram.dat
 DEP BDR 1
 EXPECT "Device\? \x5BXQA0\x5D: "  SEND "dua0:\r" ;GO
@@ -25,7 +25,7 @@ __EOF__
 
 runit() {
 simh/BIN/microvax3900 sv.ini
-for c in 1; do
+for c in 1 2 3 4 5 6 7 8 9; do
   echo; echo ++++++++++ run $c $(date) ++++++++++
   rm -f nvram.dat
   simh/BIN/microvax3900
