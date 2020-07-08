@@ -15,6 +15,7 @@ ATT NVR nvram.dat
 DEP BDR 1
 EXPECT "Device\? \x5BXQA0\x5D: "  SEND "dua0:\r" ;GO
 BOOT CPU
+QUIT
 __EOF__
 
   cat >sv.ini<<__EOF__
