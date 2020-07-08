@@ -19,6 +19,7 @@ rebuildsimh() {
 writeinis() {
   cat >microvax3900.ini <<__EOF__
 SET RUNLIMIT 25 seconds
+SET ROM DELAY
 ATT NVR nvram.dat
 DEP BDR 1
 EXPECT "Device\? \x5BXQA0\x5D: "  SEND "dua0:\r" ;GO
