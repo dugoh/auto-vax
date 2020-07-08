@@ -8,9 +8,17 @@ buildsimh() {
   cd ..
 }
 
+rebuildsimh() {
+  cd simh
+  make clean
+  git checkout $1
+  gmake vax || make vax
+  cd ..
+}
+
 writeinis() {
   cat >microvax3900.ini <<__EOF__
-SET RUNLIMIT 45 seconds
+SET RUNLIMIT 25 seconds
 ATT NVR nvram.dat
 DEP BDR 1
 EXPECT "Device\? \x5BXQA0\x5D: "  SEND "dua0:\r" ;GO
@@ -26,7 +34,7 @@ __EOF__
 
 runit() {
 simh/BIN/microvax3900 sv.ini
-for c in 1 2 3 4 5 6 7 8 9; do
+for c in 1 2 3 4 5 ; do
   echo; echo ++++++++++ run $c $(date) ++++++++++
   rm -f nvram.dat
   simh/BIN/microvax3900
@@ -38,6 +46,11 @@ main() {
 buildsimh $1
 writeinis
 runit
+for commit in $(cd simh; git log|grep "^commit "|sed -e 1d|head -50|awk '{print $2}'; cd ..); do
+  echo XXXXXXXXXXXXXXXXXX now at commit ${commit} XXXXXXXXXXXXXXXXXX 
+  rebuildsimh "${commit}"
+  runit
+done
 }
 
 ((${#}-2))&&$1
