@@ -35,7 +35,7 @@ __EOF__
 
 runit() {
 simh/BIN/microvax3900 sv.ini
-for c in 1 2 3 4 5 ; do
+for c in 1 2 ; do
   echo; echo ++++++++++ run $c $(date) ++++++++++
   rm -f nvram.dat
   simh/BIN/microvax3900
@@ -47,7 +47,8 @@ main() {
 buildsimh $1
 writeinis
 runit
-for commit in $(cd simh; git log|grep "^commit "|sed -e 1d|head -50|awk '{print $2}'; cd ..); do
+# loop through the commits, from 9711fc0 down
+for commit in $(cd simh; git log|grep "^commit "|sed -e 1,8d|head -50|awk '{print $2}'; cd ..); do
   echo XXXXXXXXXXXXXXXXXX now at commit ${commit} XXXXXXXXXXXXXXXXXX 
   rebuildsimh "${commit}"
   runit
