@@ -12,7 +12,22 @@ rebuildsimh() {
   cd simh
   make clean
   git checkout $1
-  gmake vax || make vax
+  #gmake vax || make vax
+  
+  gmake vax >gm 2>&1
+  echo $? >>gm
+  echo ====
+  head -10 gm
+  echo --
+  tail -10 gm
+  
+  make vax >m  2>&1
+  echo $? >>m
+  echo ====
+  head -10 m
+  echo --
+  tail -10 m
+
   cd ..
 }
 
