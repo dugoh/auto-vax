@@ -1,7 +1,7 @@
 language: c
 
 # Jun 28, 2020 - 9711fc017be7614a96ebe3759d779ab7de59bb96 - build #3 <-- weird change
-# May 24, 2020 - 6a816001ef0f5da9ef29ea7819cf6744c4711a73 - build #4 ?
+
 
 matrix:
   include:
@@ -16,6 +16,12 @@ matrix:
       env:
        - SIMH_CHECKOUT=166852935d9abba4f06e85cdacd97a51027c0877
        - OENV="Linux bionic"
+       
+    - os: osx
+      osx_image: xcode12
+      env:
+       - SIMH_CHECKOUT=166852935d9abba4f06e85cdacd97a51027c0877
+       - OENV="macOS 10.15.5 - xcode12.0"
        
 script: 
    - ./script try "${SIMH_CHECKOUT}"
